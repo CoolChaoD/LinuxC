@@ -14,7 +14,7 @@ int main(){
         perror("exec error");
         exit(1);
     }else if(pid>0){ //父进程
-
+   
       sleep(1);
       printf("I am paernt :%d\n",getpid());
     }
