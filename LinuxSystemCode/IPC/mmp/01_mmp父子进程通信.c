@@ -1,3 +1,4 @@
+//使用案例使用mmp实现父子进程之间的通信
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
