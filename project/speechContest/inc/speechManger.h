@@ -7,15 +7,16 @@ using namespace std;
 //设计演讲管理者类
 class SpeechManger
 {
-  //构造函数
-  SpeechManger();
+  public:
+    //构造函数
+    SpeechManger();
 
 
-  //菜单功能
-  void show_Menu();
+    //菜单功能
+    void show_Menu();
 
-  //析构函数
-  ~SpeechManger();
+    //析构函数
+    ~SpeechManger();
 };
 
 
