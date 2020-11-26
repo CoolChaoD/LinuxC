@@ -1,4 +1,4 @@
-#include "02_speechManger.h"
+#include "./inc/01_speechManger" 
 
 //构造函数
 SpeechManger::SpeechManger()
@@ -11,3 +11,9 @@ SpeechManger::~SpeechManger()
   
 }
 
+  //菜单功能
+  void SpeechManger:: show_Menu()
+{
+
+
+}

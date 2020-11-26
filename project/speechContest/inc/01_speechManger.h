@@ -9,6 +9,11 @@ class SpeechManger
 {
   //构造函数
   SpeechManger();
+
+
+  //菜单功能
+  void show_Menu();
+
   //析构函数
   ~SpeechManger();
 };
