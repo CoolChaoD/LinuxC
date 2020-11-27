@@ -1,4 +1,5 @@
 #include "speechManger.h" 
+#include <numeric>
 #include <algorithm>
 #include <unistd.h>
 
@@ -75,13 +76,14 @@ void SpeechManger::createSpeaker()
 //开始比赛 比赛的整个流程控制函数
 void SpeechManger::startSpeech()
 {
-   //第一轮开始比赛
-   
+  //第一轮开始比赛
+
   //1.抽签
   this->speechDraw();
-   
+
 
   //2.比赛
+  this->startSpeech();
   //3.显示晋级结果
   //第二轮开始比赛
   //1.抽签
@@ -114,11 +116,47 @@ void SpeechManger:: speechDraw()
       cout<<*it<<endl;
     }
     cout<<endl;
-    
+
   }
   cout<<"------------------------"<<endl;
   pause();
   cout<<endl;
+}
+
+
+//比赛
+void SpeechManger::speechContest()
+{
+  cout<<"-----------第"<<this->m_Index<<"轮比赛正式开始-------"<<endl;
+
+  vector<int> v_Src; //比赛选手的容器
+  if(this->m_Index==1)
+  {
+    v_Src=v1;
+  }
+  else
+  {
+    v_Src=v2;
+  } 
+  //评委打分
+  deque<double>d;
+  for(int i=0;i<10;i++)
+  {
+    double score=(rand()%401+600)/10.f;
+    cout<<score<<" ";
+    d.push_back(score);
+  }
+  cout<<endl;
+  sort(d.begin(),d.end(),greater<double>());
+  d.pop_front(); //去除最高分
+  d.pop_back(); //去除最低分
+
+  //累加总分
+  auto sum=accumulate(d.begin(),d.end(),0.0f); //总分
+  auto avg=sum/d.size(); //平均分
+
+  
+
 }
 //析构函数
 SpeechManger::~SpeechManger()

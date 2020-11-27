@@ -4,6 +4,8 @@
 using namespace std;
 #include <vector>
 #include <map>
+#include <deque>
+#include <algorithm>
 #include "speaker.h"
 
 //设计演讲管理者类
@@ -33,6 +35,9 @@ class SpeechManger
 
     //抽签
     void speechDraw();
+
+    //比赛
+    void speechContest();
 
     //成员属性
     //保存第一轮比赛选手编号容器
