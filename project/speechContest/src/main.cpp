@@ -30,6 +30,7 @@ int  main()
   switch(choice)
   {
     case 1: //开始比赛
+      sm.speechDraw();
       break;
     case 2: //查看往届记录
       break;

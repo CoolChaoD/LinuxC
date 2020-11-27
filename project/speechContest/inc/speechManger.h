@@ -28,6 +28,12 @@ class SpeechManger
     //创建12名选手
     void createSpeaker();
 
+    //开始比赛 比赛的整个流程控制函数
+    void startSpeech();
+
+    //抽签
+    void speechDraw();
+
     //成员属性
     //保存第一轮比赛选手编号容器
     vector<int> v1;
