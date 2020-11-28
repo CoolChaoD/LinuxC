@@ -8,21 +8,3 @@
 #include <fstream>
 
 using namespace std;
-
-void initialize_exclusion_set(set<string>&);
-void process_file(map<string,int>&,const set<string>& ,ifstream&);
-void user_query(const map<string,int>&);
-void display_word_count(const map<string,int>&,ofstream&);
-
-int main()
-{
-  ifstream ifile("./test.txt");
-  ofstream ofile("./test.map");
-  if(!ifile||!ofile)
-  {
-    cerr<<"open file error\n"<<endl;
-    return -1;
-  }
-  set<string> 
-}
-
