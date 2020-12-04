@@ -6,21 +6,23 @@
 
 int main()
 {
-  pid_t wpid pid,tmid;
+  pid_t wpid,pid,tmid;
   int status,i;
   for(i=0;i<5;i++)
   {
     pid=fork();
+    if(pid==0){
+      break;
+    }
     if(i==2)
     {
       tmid=pid;
+      printf("pid=%d\n",tmid);
     }
-    if(pid==0) //如果是子进程，那么就终止不执行fork
-      break; 
  }
   if(i==5)
   { 
-     sleep(5);
+    // sleep(5);
      //父进程
      wpid=waitpid(tmid,&status,WNOHANG);
      if(wpid==-1)
@@ -28,8 +30,8 @@ int main()
        perror("wait error");
        exit(1);
      }
-
-
+     printf("I am parent ,wait a child finish:%d\n",wpid);
   }
+  return 0;
 }
 
