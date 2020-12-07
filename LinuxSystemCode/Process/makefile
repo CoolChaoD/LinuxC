@@ -5,7 +5,7 @@ target=$(patsubst %.c,%,$(src))
 ALL:$(target)
 
 %:%.c
-	g++ $< -o $@
+	gcc $< -o $@
 
 clean: 
 	-rm -rf $(target)
