@@ -1,6 +1,11 @@
 #ifndef _WRAP_H_
 #define _WRAP_H_
-
+#include <sys/socket.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <errno.h>
 //创建套接字
 int Socket(int domain,int type,int protocol);
 void perr_exit(const char *str);

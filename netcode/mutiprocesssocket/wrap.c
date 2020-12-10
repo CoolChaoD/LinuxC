@@ -1,10 +1,11 @@
 #include "wrap.h"
 #include <stdlib.h>
 #include <sys/socket.h>
+#include <stdio.h>
 
 void perr_exit(const char *str)
 {
-  perror("str");
+  perror(str);
   exit(1);
 }
 
