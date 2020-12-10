@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <ctype.h>
+#include "wrap.h"
 
 #define SERV_PORT 9527
 
@@ -27,33 +28,17 @@ int main()
   serv_addr.sin_addr.s_addr=htonl(INADDR_ANY); //将主机字节序转化成网络字节序
   serv_addr.sin_port=htons(SERV_PORT);
 
-  lfd=socket(AF_INET,SOCK_STREAM,0);
-  if(lfd==-1)
-  {
-    sys_err("socket error");
-  }
+  lfd=Socket(AF_INET,SOCK_STREAM,0);
 
   //绑定一个地址结构到socket上
-  ret=bind(lfd,(struct sockaddr*)&serv_addr,sizeof(serv_addr));
-  if(ret==-1)
-  {
-    sys_err("bind error");
-  }
+  ret=Bind(lfd,(struct sockaddr*)&serv_addr,sizeof(serv_addr));
 
   //设置监听数
-  ret=listen(lfd,128);
-  if(ret==-1)
-  {
-    sys_err("listen error");
-  }
+  ret=Listen(lfd,128);
 
   //阻塞等待客户端建立连接并返回一个与客户端成功建立连接的socket文件描述符
   clit_addr_len=sizeof(clit_addr);
-  cfd=accept(lfd,(struct sockaddr*)&clit_addr,&clit_addr_len);
-  if(cfd==-1)
-  {
-    sys_err("accept error");
-  }
+  cfd=Accept(lfd,(struct sockaddr*)&clit_addr,&clit_addr_len);
 
   while(1)
   {
@@ -76,7 +61,7 @@ int main()
 
   }
 
-  close(lfd);
-  close(cfd);
+  Close(lfd);
+  Close(cfd);
   return 0;
 }
