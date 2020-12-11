@@ -14,14 +14,12 @@
 #include "wrap.h"
 
 
-#define SERV_PORT 9527 //定义服务器的端口9999
+#define SERV_PORT 9527 //定义服务器的端口
 void catch_waitpid(int signo)
 {
   //信号捕捉函数
   while((waitpid(0,NULL,WNOHANG))>0);
   return ;
-
-  
 }
 int main()
 {
@@ -38,7 +36,7 @@ int main()
   srv_addr.sin_port=SERV_PORT; //服务器的进程号
   srv_addr.sin_addr.s_addr=htonl(INADDR_ANY); //服务器的IP地址,主机字节转化成网络字节序
 
-  lfd=Socket(AF_INET,SOCK_STREAM,0);
+  lfd=Socket(AF_INET,SOCK_STREAM,0);  //创建监听套接字
   Bind(lfd,(struct sockaddr*)&srv_addr,sizeof(srv_addr));  //将Ip地址绑定到lfd上
   Listen(lfd,128); //设置同时监听的数量
   clt_addr_len=sizeof(clt_addr);
@@ -58,7 +56,7 @@ int main()
     }else{
       //父进程
       //在父进程中注册回收函数，但是这个时候也要注意一个问题，那就是在注册函数正在执行的时候有子进程死亡这时候就没法回收子进程了
-      //因此子啊注册函数调用好之前我们将sigchild信号屏蔽掉
+      //因此在注册函数调用好之前我们将sigchild信号屏蔽掉
 
       //阻塞屏蔽SIGCHLD
       sigset_t set,oldset; //创建自定义信号集
