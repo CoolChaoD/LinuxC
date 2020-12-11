@@ -1,6 +1,9 @@
 #include "wrap.h"
 #include <stdlib.h>
 #include <sys/socket.h>
+#include <string.h>
+#include <stdio.h>
+#include <errno.h>
 
 void perr_exit(const char *str)
 {
