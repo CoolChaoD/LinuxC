@@ -31,6 +31,24 @@ int main()
   lfd=Socket(AF_INET,SOCK_STREAM,0);
   Bind(lfd,(struct sockaddr*)&srv_addr,sizeof(srv_addr));  //将Ip地址绑定到lfd上
   Listen(lfd,128); //设置同时监听的数量
+  clt_addr_len=sizeof(clt_addr);
+
+  while(1)
+  {
+    cfd=Accept(lfd,(struct sockaddr*)&clt_addr,&clt_addr_len); //阻塞等待与客户端进行连接
+    pid=fork();//fork创建子进程
+    if(pid<0)
+    {
+      perr_exit("fork error");
+    }else if(pid==0)
+    {
+      //子进程中关闭父进程的,监听套接字
+      Close(lfd);
+      break;
+    }
+
+
+  }
 
 
 
