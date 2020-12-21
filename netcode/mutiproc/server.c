@@ -1,4 +1,5 @@
 #include "wrap.h"
+#include <signal.h>
 #include <arpa/inet.h>
 #include <strings.h>
 #include <unistd.h>
@@ -6,6 +7,11 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+void waitchild(int signo)
+{
+  while((waitpid(0,NULL,WNOHANG)>0));
+    return ; 
+}
 
 int main()
 {
@@ -49,6 +55,17 @@ int main()
       break;
     }else
     {
+      //父进程注册捕捉函数回收子进程
+      struct sigaction act;
+      act.flags=0;
+      act.sa_handler=waitchild;
+      sigemptyset(&act.sa_mask);
+      ret=sigaction(SIGCHLD,&act,NULL);
+      if(ret==-1)
+      {
+        perr_exit(1);
+      }
+      
       close(cfd);
       continue;
     }
