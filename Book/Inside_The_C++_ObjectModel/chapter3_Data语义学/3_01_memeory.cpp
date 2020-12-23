@@ -21,8 +21,6 @@ void test01()
 }
 
 //2.内存对齐
-
-
 class Dog
 {
   public:
