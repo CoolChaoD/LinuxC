@@ -1,7 +1,7 @@
 #include "common.h"
 
 //定义服务器的IP地址
-#define SERV_IP "47.96.255.54" 
+#define SERV_IP "127.0.0.1" 
 #define SERV_PORT 6666
 
 int main(void)
@@ -21,7 +21,7 @@ int main(void)
 	//将端口号从主机字节序转化成网络字节序
 	serv_addr.sin_port=htons(SERV_PORT);
 	//根据地址结构连接指定服务器
-	connect(nfd,(struct sockaddr *)&serv_addr,sizeof(serv_addr));
+	Connect(nfd,(struct sockaddr *)&serv_addr,sizeof(serv_addr));
 	
 	while(1){
 		//从标准输入中获取数据
