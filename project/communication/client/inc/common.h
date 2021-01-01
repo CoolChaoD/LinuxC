@@ -14,10 +14,18 @@
 #include <strings.h>
 
 //定义一个结构体用来存放客户端的地址结构
-struct IPAddr{
+typedef struct IPAddr{
 	    char IP[20];
 	    int port;    
-};
+}IPAddr;
+
+//定义发送数据的数据格式
+typedef struct Message{
+	  struct IPAddr ipaddr;
+	  char buf[1024];
+}Message;
+
+
 
 //函数的定义
 // 01创建套接字

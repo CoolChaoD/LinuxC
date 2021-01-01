@@ -1,61 +1,77 @@
 #include "common.h"
 
-//¶¨Òå·şÎñÆ÷µÄIPµØÖ·
+//å®šä¹‰æœåŠ¡å™¨çš„IPåœ°å€
 #define SERV_IP "127.0.0.1" 
 #define SERV_PORT 6666
 
 
 int main(void)
 {
-	pid_t pid; //¿Í»§¶ËĞèÒªÓĞÁ½¸ö½ø³ÌÒ»¸öÓÃÀ´¶ÁÈ¡Ò»¸öÓÃÀ´·¢ËÍ
+	//å˜é‡å£°æ˜
+	pid_t pid; //å®¢æˆ·ç«¯éœ€è¦æœ‰ä¸¤ä¸ªè¿›ç¨‹ä¸€ä¸ªç”¨æ¥è¯»å–ä¸€ä¸ªç”¨æ¥å‘é€
 	int nfd,len;
 	struct sockaddr_in serv_addr;
 	char buf[BUFSIZ];
+	Message message;     //å£°æ˜ä¸€ä¸ªå‘é€æ•°æ®çš„ç»“æ„ä½“
 	
-	//´´½¨Ò»¸ösocket Ö¸¶¨IPV4 ²ÉÓÃTCPÀ´½øĞĞÁ¬½Ó
+	
+	
+	//åˆ›å»ºä¸€ä¸ªsocket æŒ‡å®šIPV4 é‡‡ç”¨TCPæ¥è¿›è¡Œè¿æ¥
 	nfd=socket(AF_INET,SOCK_STREAM,0);
 	
-	//³õÊ¼»¯µØÖ·½á¹¹
-	bzero(&serv_addr,sizeof(serv_addr));  //ÇåÁã
+	//åˆå§‹åŒ–åœ°å€ç»“æ„
+	bzero(&serv_addr,sizeof(serv_addr));  //æ¸…é›¶
 	serv_addr.sin_family=AF_INET;   //IPV4
-	//½«IPµØÖ·µÄ×Ö·û´®ÀàĞÍ×ª»»³ÉÍøÂç×Ö½ÚĞò£¬²ÎÊı3 ÊÇ´«³ö²ÎÊı
+	//å°†IPåœ°å€çš„å­—ç¬¦ä¸²ç±»å‹è½¬æ¢æˆç½‘ç»œå­—èŠ‚åºï¼Œå‚æ•°3 æ˜¯ä¼ å‡ºå‚æ•°
 	inet_pton(AF_INET,SERV_IP,&serv_addr.sin_addr.s_addr);
-	//½«¶Ë¿ÚºÅ´ÓÖ÷»ú×Ö½ÚĞò×ª»¯³ÉÍøÂç×Ö½ÚĞò
+	//å°†ç«¯å£å·ä»ä¸»æœºå­—èŠ‚åºè½¬åŒ–æˆç½‘ç»œå­—èŠ‚åº
 	serv_addr.sin_port=htons(SERV_PORT);
-	//¸ù¾İµØÖ·½á¹¹Á¬½ÓÖ¸¶¨·şÎñÆ÷
+	//æ ¹æ®åœ°å€ç»“æ„è¿æ¥æŒ‡å®šæœåŠ¡å™¨
 	Connect(nfd,(struct sockaddr *)&serv_addr,sizeof(serv_addr));
 	
-	//½ÓÊÕ·şÎñÆ÷µÄµØÖ·²¢Ğ´µ½ÏÔÊ¾ÆÁÄ»ÉÏ
+	//æ¥æ”¶æœåŠ¡å™¨çš„åœ°å€å¹¶å†™åˆ°æ˜¾ç¤ºå±å¹•ä¸Š
 	struct IPAddr clientRecv;
 	char cli_IP[1024];
 	len=read(nfd,buf,sizeof(buf));
 	memcpy(&clientRecv,buf,len);
 	//printf("client IP:%s:Port:%d\n",inet_ntop(AF_INET,&clientRecv.IP,cli_IP,sizeof(cli_IP)),ntohs(clientRecv.port));
 	printf("MyIP:%s:Port:%d\n",clientRecv.IP,clientRecv.port);
-	pid=fork(); //fork´´½¨ÁËÒ»¸ö×Ó½ø³Ì
+	pid=fork(); //forkåˆ›å»ºäº†ä¸€ä¸ªå­è¿›ç¨‹
 	if(pid>0)
 	{
-		//ËµÃ÷»úÄÚÁË¸¸½ø³Ì£¬¸¸½ø³ÌÓÃÀ´·¢ËÍÊı¾İ¸ø¿Í»§¶Ë
+		//è¯´æ˜æœºå†…äº†çˆ¶è¿›ç¨‹ï¼Œçˆ¶è¿›ç¨‹ç”¨æ¥å‘é€æ•°æ®ç»™å®¢æˆ·ç«¯
 		while(1)
 		{
-			//´Ó±ê×¼ÊäÈëÖĞ»ñÈ¡Êı¾İ
-			fgets(buf,sizeof(buf),stdin);
-			//½«Êı¾İĞ´¸ø·şÎñÆ÷
-			write(nfd,buf,strlen(buf));
+			printf("Please input the destination IP:Port and send message \n");
+
+			//fgets(message.ipaddr.IP,sizeof(message.ipaddr.IP),stdin);
+	    scanf("%s\n",message.ipaddr.IP); 
+	    
+			char n[10];	
+			fgets(n,sizeof(n),stdin);
+			sscanf(n,"%d",&message.ipaddr.port); //å°†å­—ç¬¦ä¸²è½¬æ¢æˆæ•´æ•°		
+				
+			//ä»æ ‡å‡†è¾“å…¥ä¸­è·å–æ•°æ®
+			fgets(message.buf,sizeof(message.buf),stdin);
+			
+			printf("%s:%d,data:%s\n",message.ipaddr.IP,message.ipaddr.port,message.buf);
+			//å°†æ•°æ®å†™ç»™æœåŠ¡å™¨
+			//write(nfd,buf,strlen(buf));
 	  }
 	}else if(pid==0){
-		//½øÈë×Ó½ø³Ì
+		//è¿›å…¥å­è¿›ç¨‹
 		while(1)
 		{
-			//Ñ­»·¼àÌı·şÎñÆ÷·¢ËÍ¹ıÀ´µÄÏûÏ¢
+			//å¾ªç¯ç›‘å¬æœåŠ¡å™¨å‘é€è¿‡æ¥çš„æ¶ˆæ¯
+			
 			len=read(nfd,buf,sizeof(buf));
-			write(STDOUT_FILENO,buf,len);//½«´Ó·şÎñÆ÷ÉÏ½ÓÊÕµ½µÄĞÅÏ¢Êä³öµ½ÄãÏÔÊ¾ÆÁÉÏ
+			write(STDOUT_FILENO,buf,len);//å°†ä»æœåŠ¡å™¨ä¸Šæ¥æ”¶åˆ°çš„ä¿¡æ¯è¾“å‡ºåˆ°ä½ æ˜¾ç¤ºå±ä¸Š
 		}
 	}else{
 		perror("fork error");
 		exit(1);
 	}
-	//¹Ø±ÕÁ¬½Ó
+	//å…³é—­è¿æ¥
 	Close(nfd);
 	return  0;
 }
