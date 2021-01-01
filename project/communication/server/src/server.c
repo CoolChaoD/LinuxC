@@ -85,7 +85,7 @@ int main()
    	break;
    }
    
-  
+   
    pid=fork();
    if(pid==0){
    	//进入子进程
@@ -105,18 +105,13 @@ int main()
    }else{
 		perror("fork error");
    	exit(1);
-   }
-   
-   
-   if(pid==0)
+   } 
+  } 
+  
+  if(pid==0)
    {  	
-
-		
    	 //进入子进程 
-   	 for(;;){   	
-		    //1.将客户端的IP地址和端口号返回给客户端
-
-		        
+   	 while(1){   			  	        
 		   	int len=read(cfd,buf,sizeof(buf)); //读取子进程发送的内容
 		   	if(len==0){
 		   	    //说明已经读到文件末尾了
@@ -131,15 +126,11 @@ int main()
 		   	//写回去给客户端
 		   	write(cfd,buf,len);
 		   	write(STDOUT_FILENO,buf,len);
-     }
-     
-     
-     
-     
+     }   
      Close(cfd);
      return 0;
    }
-  }
+  
 
   return 0;
 }
