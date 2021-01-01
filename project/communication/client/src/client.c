@@ -30,7 +30,8 @@ int main(void)
 	char cli_IP[1024];
 	len=read(nfd,buf,sizeof(buf));
 	memcpy(&clientRecv,buf,len);
-	printf("client IP:%s:Port:%d\n",inet_ntop(AF_INET,&clientRecv.IP,cli_IP,sizeof(cli_IP)),ntohs(clientRecv.port));
+	//printf("client IP:%s:Port:%d\n",inet_ntop(AF_INET,&clientRecv.IP,cli_IP,sizeof(cli_IP)),ntohs(clientRecv.port));
+	printf("client IP:%s:Port:%d\n",clientRecv.IP,clientRecv.port);
 	pid=fork(); //fork创建了一个子进程
 	if(pid>0)
 	{
