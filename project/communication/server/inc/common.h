@@ -11,7 +11,15 @@
 #include <signal.h>
 #include <arpa/inet.h>
 #include <strings.h>
+#include <signal.h>
+#include <ctype.h>
+#include <sys/wait.h>
 
+//定义一个结构体用来存放客户端的地址结构
+struct IPAddr{
+	    char IP[20];
+	    int port;    
+};
 
 //函数的定义
 // 01创建套接字

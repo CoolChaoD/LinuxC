@@ -4,6 +4,7 @@
 #define SERV_IP "127.0.0.1" 
 #define SERV_PORT 6666
 
+
 int main(void)
 {
 	int nfd,len;
@@ -22,6 +23,8 @@ int main(void)
 	serv_addr.sin_port=htons(SERV_PORT);
 	//根据地址结构连接指定服务器
 	Connect(nfd,(struct sockaddr *)&serv_addr,sizeof(serv_addr));
+	
+	
 	
 	while(1){
 		//从标准输入中获取数据
