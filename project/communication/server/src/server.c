@@ -16,12 +16,13 @@ int main()
 	//声明监听套接字和连接套接字
 	int lfd,cfd,ret;
 	pid_t pid;
-	char buf[BUFSIZ];
+	char buf[1024];
 	int i;
-	//定义一个数组用来存放客户端的地址结构
-	struct IPAddr storeAddr[64];
 	//用于存储客户端的IP地址
 	char cli_IP[1024];
+
+
+
 
 	//定义客户端与服务器的地址结构
 	struct sockaddr_in serv_addr,cli_addr;
@@ -49,10 +50,7 @@ int main()
   //获取客户端的地址结构大小
   cli_addr_len=sizeof(cli_addr);
 
-  //04_阻塞等待客户端的连接，参数1:监听套接字lfd,参数2:传入参数，参数3：传出参数
-  //cfd=Accept(lfd,(struct sockaddr*)&cli_addr,&cli_addr_len);
-
-  struct IPAddr clientAddrList[1024];
+  struct IPAddr clientAddrList[1024];  //存放已经连接的客户端的地址结构
   printf("Accepting connections...\n");
   int m=0;
   while(1)
@@ -69,6 +67,12 @@ int main()
    struct IPAddr clientAddr;
    strncpy(clientAddr.IP,cli_IP,strlen(cli_IP));
    clientAddr.port=ntohs(cli_addr.sin_port);   
+   
+   memset(buf,0,1024); //将buf清零
+	 memcpy(buf,&clientAddr,sizeof(IPAddr));
+	 printf("child %s:%d\n",clientAddr.IP,clientAddr.port);
+	 write(cfd,buf,sizeof(buf)); //将客户端的地址结构发送给客户端	
+	 
   // printf("%s:%d",clientAddr.IP,clientAddr.port);
    //将结构体中的元素添加到数组当中  
    clientAddrList[m]=clientAddr;
@@ -81,6 +85,7 @@ int main()
    	break;
    }
    
+  
    pid=fork();
    if(pid==0){
    	//进入子进程
@@ -95,16 +100,23 @@ int main()
    	//父进程首先清空阻塞信号集
    	sigemptyset(&act.sa_mask);
    	ret=sigaction(SIGCHLD,&act,NULL);
-   //	Close(cfd); //父进程无须通信因此关闭与客户端的通信的套接字
+    Close(cfd); //父进程无须通信因此关闭与客户端的通信的套接字
    	continue;
    }else{
-perror("fork error");
+		perror("fork error");
    	exit(1);
    }
+   
+   
    if(pid==0)
-   {
-   	 for(;;){
-		   	//进入子进程
+   {  	
+
+		
+   	 //进入子进程 
+   	 for(;;){   	
+		    //1.将客户端的IP地址和端口号返回给客户端
+
+		        
 		   	int len=read(cfd,buf,sizeof(buf)); //读取子进程发送的内容
 		   	if(len==0){
 		   	    //说明已经读到文件末尾了
@@ -120,6 +132,10 @@ int main()
 		   	write(cfd,buf,len);
 		   	write(STDOUT_FILENO,buf,len);
      }
+     
+     
+     
+     
      Close(cfd);
      return 0;
    }

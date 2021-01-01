@@ -1,6 +1,7 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
+//客户端
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,6 +13,11 @@
 #include <arpa/inet.h>
 #include <strings.h>
 
+//定义一个结构体用来存放客户端的地址结构
+struct IPAddr{
+	    char IP[20];
+	    int port;    
+};
 
 //函数的定义
 // 01创建套接字
