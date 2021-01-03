@@ -20,7 +20,7 @@ int main()
 	int i;
 	//用于存储客户端的IP地址
 	char cli_IP[1024];
-
+  Message recvMessage;
 
 
 
@@ -118,20 +118,13 @@ int main()
 		   	    printf("对端关闭连接");
 		   	    exit(1);
 		   	}
-		   	//完成小写转换成大写
-		   	for(int i=0;i<len;i++)
-		   	{
-		   		buf[i]=toupper(buf[i]);
-		   	}
-		   	//写回去给客户端
-		   	write(cfd,buf,len);
-		   	write(STDOUT_FILENO,buf,len);
+        memcpy(&recvMessage,buf,len);
+        printf("%s:%d,data:%s\n",recvMessage.ipaddr.IP,recvMessage.ipaddr.port,recvMessage.buf);
+		    //write(STDOUT_FILENO,buf,len);
      }   
      Close(cfd);
      return 0;
    }
-  
-
   return 0;
 }
 

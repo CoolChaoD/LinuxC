@@ -43,20 +43,17 @@ int main(void)
 		while(1)
 		{
 			printf("Please input the destination IP:Port and send message \n");
-
-			//fgets(message.ipaddr.IP,sizeof(message.ipaddr.IP),stdin);
-	    scanf("%s\n",message.ipaddr.IP); 
-	    
+	    scanf("%s\n",message.ipaddr.IP);  
+	       
 			char n[10];	
 			fgets(n,sizeof(n),stdin);
-			sscanf(n,"%d",&message.ipaddr.port); //将字符串转换成整数		
-				
+			sscanf(n,"%d",&message.ipaddr.port); //将字符串转换成整数					
 			//从标准输入中获取数据
-			fgets(message.buf,sizeof(message.buf),stdin);
-			
-			printf("%s:%d,data:%s\n",message.ipaddr.IP,message.ipaddr.port,message.buf);
+			fgets(message.buf,sizeof(message.buf),stdin);    
+		  printf("%s:%d,data:%s\n",message.ipaddr.IP,message.ipaddr.port,message.buf);
+			memcpy(buf,&message,sizeof(Message));
 			//将数据写给服务器
-			//write(nfd,buf,strlen(buf));
+			write(nfd,buf,sizeof(buf));
 	  }
 	}else if(pid==0){
 		//进入子进程

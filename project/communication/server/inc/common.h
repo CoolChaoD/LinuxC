@@ -23,6 +23,12 @@ typedef struct IPAddr{
 	    int port;    
 }IPAddr;
 
+//定义发送数据的数据格式
+typedef struct Message{
+	  struct IPAddr ipaddr;
+	  char buf[1024];
+}Message;
+
 
 
 //函数的定义
