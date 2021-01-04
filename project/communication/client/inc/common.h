@@ -22,7 +22,7 @@ typedef struct IPAddr{
 //定义发送数据的数据格式
 typedef struct Message{
 	  struct IPAddr ipaddr;
-	  char buf[1024];
+	  char buf[20];
 }Message;
 
 

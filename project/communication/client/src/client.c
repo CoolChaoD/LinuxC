@@ -5,13 +5,14 @@
 #define SERV_PORT 6666
 
 
+
 int main(void)
 {
 	//变量声明
 	pid_t pid; //客户端需要有两个进程一个用来读取一个用来发送
 	int nfd,len;
 	struct sockaddr_in serv_addr;
-	char buf[BUFSIZ];
+	char buf[4096];
 	Message message;     //声明一个发送数据的结构体
 	
 	
@@ -39,18 +40,17 @@ int main(void)
 	pid=fork(); //fork创建了一个子进程
 	if(pid>0)
 	{
-		//说明机内了父进程，父进程用来发送数据给客户端
+		//说明进入了父进程，父进程用来发送数据给客户端
 		while(1)
 		{
 			printf("Please input the destination IP:Port and send message \n");
-	    scanf("%s\n",message.ipaddr.IP);  
-	       
+	    scanf("%s\n",message.ipaddr.IP);     
 			char n[10];	
 			fgets(n,sizeof(n),stdin);
 			sscanf(n,"%d",&message.ipaddr.port); //将字符串转换成整数					
-			//从标准输入中获取数据
+	    //从标准输入中获取数据
 			fgets(message.buf,sizeof(message.buf),stdin);    
-		  printf("%s:%d,data:%s\n",message.ipaddr.IP,message.ipaddr.port,message.buf);
+		  printf("%s:%d,data:%s",message.ipaddr.IP,message.ipaddr.port,message.buf);
 			memcpy(buf,&message,sizeof(Message));
 			//将数据写给服务器
 			write(nfd,buf,sizeof(buf));

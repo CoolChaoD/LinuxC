@@ -16,7 +16,7 @@ int main()
 	//声明监听套接字和连接套接字
 	int lfd,cfd,ret;
 	pid_t pid;
-	char buf[1024];
+	char buf[4096];
 	int i;
 	//用于存储客户端的IP地址
 	char cli_IP[1024];
@@ -71,8 +71,7 @@ int main()
    memset(buf,0,1024); //将buf清零
 	 memcpy(buf,&clientAddr,sizeof(IPAddr));
 	 printf("child %s:%d\n",clientAddr.IP,clientAddr.port);
-	 write(cfd,buf,sizeof(buf)); //将客户端的地址结构发送给客户端	
-	 
+	 write(cfd,buf,sizeof(buf)); //将客户端的地址结构发送给客户端	 
   // printf("%s:%d",clientAddr.IP,clientAddr.port);
    //将结构体中的元素添加到数组当中  
    clientAddrList[m]=clientAddr;
@@ -84,8 +83,7 @@ int main()
    	printf("客户端连接数量超过上限\n");
    	break;
    }
-   
-   
+    
    pid=fork();
    if(pid==0){
    	//进入子进程
@@ -111,7 +109,8 @@ int main()
   if(pid==0)
    {  	
    	 //进入子进程 
-   	 while(1){   			  	        
+   	 for(;;){   
+   	 	  		  	        
 		   	int len=read(cfd,buf,sizeof(buf)); //读取子进程发送的内容
 		   	if(len==0){
 		   	    //说明已经读到文件末尾了
@@ -119,11 +118,10 @@ int main()
 		   	    exit(1);
 		   	}
         memcpy(&recvMessage,buf,len);
+        printf("from client:\n");	
         printf("%s:%d,data:%s\n",recvMessage.ipaddr.IP,recvMessage.ipaddr.port,recvMessage.buf);
 		    //write(STDOUT_FILENO,buf,len);
      }   
-     Close(cfd);
-     return 0;
    }
   return 0;
 }
