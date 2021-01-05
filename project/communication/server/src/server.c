@@ -21,8 +21,27 @@ int main()
 	//用于存储客户端的IP地址
 	char cli_IP[1024];
   Message recvMessage;
-
-
+  struct IPAddr clientAddr;
+  
+  
+  
+  //创建共享内存映射
+  Message *p;
+  int fd;
+  //打开一个文件
+  fd=open("./mmap.txt",O_RDWR|O_CREAT);
+  if(fd<0)
+  	{
+  		perror("open error");
+  	}
+   ftruncate(fd,sizeof(recvMessage));
+   p=mmap(NULL,sizeof(recvMessage),PROT_READ|PROT_WRITE,MAP_SHARED,fd,0);
+  if(p==MAP_FAILED)
+  {
+    perror("mmap error");
+    exit(1);
+  }
+  Close(fd); //共享内存映射区创建完毕后可以关闭文件描述符
 
 	//定义客户端与服务器的地址结构
 	struct sockaddr_in serv_addr,cli_addr;
@@ -64,15 +83,15 @@ int main()
    printf("client IP:%s:Port:%d\n",inet_ntop(AF_INET,&cli_addr.sin_addr.s_addr,cli_IP,sizeof(cli_IP)),ntohs(cli_addr.sin_port));
    
    //将客户端的地址结构存放到结构体内部
-   struct IPAddr clientAddr;
+   
    strncpy(clientAddr.IP,cli_IP,strlen(cli_IP));
    clientAddr.port=ntohs(cli_addr.sin_port);   
    
    memset(buf,0,1024); //将buf清零
 	 memcpy(buf,&clientAddr,sizeof(IPAddr));
-	 printf("child %s:%d\n",clientAddr.IP,clientAddr.port);
+	 //printf("child %s:%d\n",clientAddr.IP,clientAddr.port);
 	 write(cfd,buf,sizeof(buf)); //将客户端的地址结构发送给客户端	 
-  // printf("%s:%d",clientAddr.IP,clientAddr.port);
+   // printf("%s:%d",clientAddr.IP,clientAddr.port);
    //将结构体中的元素添加到数组当中  
    clientAddrList[m]=clientAddr;
    //printf("%s:%d",clientAddrList[0].IP,clientAddrList[0].port);
@@ -100,27 +119,43 @@ int main()
    	ret=sigaction(SIGCHLD,&act,NULL);
     Close(cfd); //父进程无须通信因此关闭与客户端的通信的套接字
    	continue;
-   }else{
-		perror("fork error");
+   }else
+{
+
+		
+perror("fork error");
    	exit(1);
    } 
   } 
   
   if(pid==0)
    {  	
+   	 IPAddr myAddr;
+   	 IPAddr recvAddr;
+   	 myAddr=clientAddr; //每一个子进程中都有一个地址结构存储着自己的地址结构
+   	 //printf("I am a child process for %s:%d\n",myAddr.IP,myAddr.port);
    	 //进入子进程 
-   	 for(;;){   
-   	 	  		  	        
+   	 for(;;){    
+   	 	  	 	 	 		
+		    if(recvAddr.IP==myAddr.IP&&recvAddr.port==myAddr.port)
+		    {
+		    	  printf("match correct");
+		    }
+		     	  	        
 		   	int len=read(cfd,buf,sizeof(buf)); //读取子进程发送的内容
 		   	if(len==0){
 		   	    //说明已经读到文件末尾了
 		   	    printf("对端关闭连接");
 		   	    exit(1);
 		   	}
-        memcpy(&recvMessage,buf,len);
-        printf("from client:\n");	
-        printf("%s:%d,data:%s\n",recvMessage.ipaddr.IP,recvMessage.ipaddr.port,recvMessage.buf);
-		    //write(STDOUT_FILENO,buf,len);
+        //memcpy(&recvMessage,buf,len);
+        //printf("from client:\n");
+        //printf("%s:%d,data:%s\n",recvMessage.ipaddr.IP,recvMessage.ipaddr.port,recvMessage.buf);
+		    memcpy(p,buf,len);
+        recvAddr=p->ipaddr;
+        
+		    printf("%s:%d,data:%s\n:",p->ipaddr.IP,p->ipaddr.port,p->buf);
+		  
      }   
    }
   return 0;
