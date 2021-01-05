@@ -127,31 +127,38 @@ int main()
   
   if(pid==0)
    {  	
+   	 int len;
    	 IPAddr myAddr;
    	 IPAddr recvAddr;
-   	 myAddr=clientAddr; //每一个子进程中都有一个地址结构存储着自己的地址结构
-   	 //printf("I am a child process for %s:%d\n",myAddr.IP,myAddr.port);
-   	 //进入子进程 
-   	 for(;;){    
-   	 	  	 	 	 		
+   	 myAddr=clientAddr; //每一个子进程中都有一个地址结构存储着自己的地址结构  	 
+   	 printf("my pid is %d\n",getpid());	 	
+   	 printf("======================\n");
+   	 while(1){    	
+   	 	  for(int j=0;j<3;j++)
+   	 	 {        	 	  
+   	 	  recvAddr=p->ipaddr;	 	 	 
+   	 	  printf("I am a child process for %s:%d\n",myAddr.IP,myAddr.port);	
+   	 	  printf("recvAddr%s:%d\n",recvAddr.IP,recvAddr.port);
 		    if(recvAddr.IP==myAddr.IP&&recvAddr.port==myAddr.port)
 		    {
 		    	  printf("match correct");
 		    }
-		     	  	        
-		   	int len=read(cfd,buf,sizeof(buf)); //读取子进程发送的内容
+		   } 	
+		    for(int i=0;i<3;i++)
+		   {        
+		   	len=read(cfd,buf,sizeof(buf)); //读取子进程发送的内容
 		   	if(len==0){
 		   	    //说明已经读到文件末尾了
 		   	    printf("对端关闭连接");
 		   	    exit(1);
-		   	}
+		   }
+		  }
         //memcpy(&recvMessage,buf,len);
         //printf("from client:\n");
         //printf("%s:%d,data:%s\n",recvMessage.ipaddr.IP,recvMessage.ipaddr.port,recvMessage.buf);
-		    memcpy(p,buf,len);
-        recvAddr=p->ipaddr;
-        
-		    printf("%s:%d,data:%s\n:",p->ipaddr.IP,p->ipaddr.port,p->buf);
+		    memcpy(p,buf,len);       
+        //printf("recvAddr%s:%d\n",recvAddr.IP,recvAddr.port);
+		    //printf("%s:%d,data:%s\n:",p->ipaddr.IP,p->ipaddr.port,p->buf);
 		  
      }   
    }
